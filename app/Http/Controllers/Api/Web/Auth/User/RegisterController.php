@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Rules\Name;
 use App\Rules\Mobile;
 use App\Rules\Pass;
+use Mews\Captcha;
+
 
 class RegisterController extends Controller
 {
@@ -31,7 +33,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    // use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -48,7 +50,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         // $this->middleware('guest:shop');
-        $this->middleware('guest');
+        // $this->middleware('guest');
     }
 
    
@@ -62,6 +64,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        
         $this->validator($request->all())->validate();
 
         // event(new Registered($user = $this->create($request->all())));
@@ -101,7 +104,7 @@ class RegisterController extends Controller
           'mobile'=>['sometimes' , 'required' ,new Mobile, 'unique:users,mobile'. $id],
           'pass'=>['sometimes' , 'required' , new Pass ],
           'email'=>['sometimes' , 'required' , 'email' , 'unique:users,email' . $id],
-          'captcha'=>['sometimes' , 'required' , 'captcha'],
+          'captcha'=>['sometimes' , 'required','captcha_api:'. $data['key']],
         ]);
     }
 
@@ -126,4 +129,9 @@ class RegisterController extends Controller
             'show' => '1',
         ]);
     }
+
+    // public function reloadCaptcha()
+    // {
+    //     return response()->json(['captcha'=> captcha_img()]);
+    // }
 }

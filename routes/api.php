@@ -23,6 +23,7 @@ Route::prefix('web')->namespace('App\Http\Controllers\Api\Web')->group(function(
   Route::post('/rahimi',function(){
     return 'ok';
   });
+  Route::post('/check','CheckSessionController@check');
   Route::get('/refreshCaptcha', 'CaptchaController@refreshCaptcha');
   Route::prefix('authUser')->namespace('Auth\User')->group(function (){
   Route::post('/login','LoginController@login');

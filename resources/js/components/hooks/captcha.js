@@ -1,18 +1,26 @@
 import React, { useState, useEffect , useImperativeHandle , forwardRef } from 'react';
 import axios from 'axios';
+import { trim } from 'jquery';
 const Captcha = forwardRef((props, ref) => {
-    const [captchaSrc, setCaptchaSrc] = useState(null)
+    const [captcha, setCaptcha] = useState(null)
+    const [captchaKey, setCaptchaKey] = useState('')
+
     const refreshCaptcha = () => {
         axios.get('/api/web/refreshCaptcha')
             .then(response => {
-                setCaptchaSrc(response.data.captchaSrc)
+                setCaptcha(response.data.url.img)
+                setCaptchaKey(response.data.url.key);
             })
     }
+   
     useImperativeHandle(ref,()=>({
         refreshCaptcha
+        
     }))
    
     useEffect(()=>{
+        
+        
         refreshCaptcha()
     },[])
     const handleFocus = () => {
@@ -28,12 +36,14 @@ const Captcha = forwardRef((props, ref) => {
                          <i className="fa fa-star star" aria-hidden="true"></i>
                 </label>
                 <div className='captcha'>
-                    <input type="text" onBlur={props.handleCheckValue} className='form-control inputForm captchaInput' id='captcha' onFocus={handleFocus} />
+                    <input type="text"  className='form-control inputForm captchaInput' id='captcha' onFocus={handleFocus} />
                     <div className='captchaPic'>
-                        <img className='imgCaptcha' src={captchaSrc} onClick={refreshCaptcha} />
+                        <img className='imgCaptcha' src={captcha} onClick={refreshCaptcha} />
                         <button type='button' onClick={refreshCaptcha} className='btn btn-outline-secondary btnCaptcha'> <i className="fas fa-sync-alt"></i></button>
                     </div>
                 </div>
+                {/* get key captcha and send */}
+                <input id='captchaKey' type="hidden" value={captchaKey}/>
                 <div className='validFeedback captchaFeedback'>
                     {/* css code label in form/main.scss */}
 

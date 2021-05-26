@@ -35,6 +35,6 @@ class Mobile implements Rule
      */
     public function message()
     {
-        return 'The validation error mobile message.';
+        return 'موبایل را صحیح وارد کنید.';
     }
 }

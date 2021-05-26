@@ -2949,7 +2949,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2966,15 +2968,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var Captcha = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(function (props, ref) {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
-      captchaSrc = _useState2[0],
-      setCaptchaSrc = _useState2[1];
+      captcha = _useState2[0],
+      setCaptcha = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      captchaKey = _useState4[0],
+      setCaptchaKey = _useState4[1];
 
   var refreshCaptcha = function refreshCaptcha() {
     axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/web/refreshCaptcha').then(function (response) {
-      setCaptchaSrc(response.data.captchaSrc);
+      setCaptcha(response.data.url.img);
+      setCaptchaKey(response.data.url.key);
     });
   };
 
@@ -2992,39 +3001,42 @@ var Captcha = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(fun
     $('.captchaFeedback').html(' ');
   };
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
     className: "form-group formGroupDiv",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
       htmlFor: "captcha",
       className: "labelForm",
-      children: ["\u06A9\u062F \u0627\u0645\u0646\u06CC\u062A\u06CC", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+      children: ["\u06A9\u062F \u0627\u0645\u0646\u06CC\u062A\u06CC", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
         className: "fa fa-star star",
         "aria-hidden": "true"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
       className: "captcha",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
         type: "text",
-        onBlur: props.handleCheckValue,
         className: "form-control inputForm captchaInput",
         id: "captcha",
         onFocus: handleFocus
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
         className: "captchaPic",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
           className: "imgCaptcha",
-          src: captchaSrc,
+          src: captcha,
           onClick: refreshCaptcha
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
           type: "button",
           onClick: refreshCaptcha,
           className: "btn btn-outline-secondary btnCaptcha",
-          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
             className: "fas fa-sync-alt"
           })]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+      id: "captchaKey",
+      type: "hidden",
+      value: captchaKey
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
       className: "validFeedback captchaFeedback"
     })]
   });
@@ -4440,12 +4452,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 function Register() {
+  var changeCaptcha = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     name: null,
     email: null,
     mobile: null,
-    pass: null,
-    captcha: null
+    pass: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
       element = _useState2[0],
@@ -4466,8 +4479,7 @@ function Register() {
 
     setElement(function (prev) {
       return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, id, value));
-    });
-    console.log(id); // // because in this fun to send only element , also geting errors for of this dont use fun then
+    }); // // because in this fun to send only element , also geting errors for of this dont use fun then
 
     axios.post('/api/web/authUser/register', _defineProperty({}, id, value), {
       headers: {
@@ -4475,37 +4487,78 @@ function Register() {
         'accept': 'application/json'
       }
     }).then(function (response) {
-      jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + idParent).css("border", "1px solid green"); // $(`#${idParent} label i.false`).css("display", "flex");
-
+      jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + idParent).css("border", "1px solid green");
       jquery__WEBPACK_IMPORTED_MODULE_3___default()("#".concat(idParent, " i.true")).css("display", "flex");
       child.innerHTML = '';
     })["catch"](function (error) {
       jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + idParent).css("border", "1px solid red");
       jquery__WEBPACK_IMPORTED_MODULE_3___default()("#".concat(idParent)).addClass('inputFromSelect');
       jquery__WEBPACK_IMPORTED_MODULE_3___default()("#".concat(idParent, " i.false")).css("display", "flex");
-      child.innerHTML = error.response.data.errors[id]; // if (error.response.status == 500) {
-      //     $('#' + idParent).css("border","1px solid green");
-      // }
-      // else{
-      // const checkError = error.response.data.errors[id]
-      // if (checkError) {
-      //     setElement(prevState => ({ ...prevState, [id]: null }))
-      //     $('#' + idParent).css("border", "1px solid red");
-      //     $(`#${idParent} label i.false`).css("display", "flex");
-      //     $('.' + idParent + 'Feedback').html(checkError)
-      // }
-      // else {
-      //     $('#' + idParent).css("border","1px solid green");
-      //     $(`#${idParent} label i.true`).css("display", "flex");
-      // }
-      // }
+      child.innerHTML = error.response.data.errors[id];
     });
-  }; // const checkInput=(e)=>{
-  //     const id=e.target.id;
-  //     const val=document.getElementById(id).value;
-  //     setName(val)
-  // }
+  };
 
+  var handleSubmit = function handleSubmit(e) {
+    e.preventDefault();
+
+    var data = _objectSpread(_objectSpread({}, element), {}, {
+      captcha: jquery__WEBPACK_IMPORTED_MODULE_3___default()('#captcha').val(),
+      key: jquery__WEBPACK_IMPORTED_MODULE_3___default()('#captchaKey').val()
+    });
+
+    console.log(data);
+    axios.post('/api/web/authUser/register', data, {
+      headers: {
+        'X-CSRF-TOKEN': jquery__WEBPACK_IMPORTED_MODULE_3___default()('meta[name="csrf-token"]').attr('content'),
+        'Content-Type': 'application/json; charset=utf-8'
+      }
+    }).then(function (response) {
+      console.log(response.data); // props.history.replace('/endRegisterSocialNetwork', response.data.socialNetwork)
+
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'ثبت نام با موفقیت انجام شد .',
+        showConfirmButton: false,
+        timer: 3000
+      });
+    })["catch"](function (error) {
+      console.log(error.response.data.errors);
+      jquery__WEBPACK_IMPORTED_MODULE_3___default()('#captcha').val('');
+      jquery__WEBPACK_IMPORTED_MODULE_3___default()('.captchaFeedback').html('');
+      changeCaptcha.current.refreshCaptcha();
+
+      if (error.response.status == 422) {
+        var errorData = error.response.data.errors;
+        var firstError = Object.keys(errorData)[0];
+        var offset = jquery__WEBPACK_IMPORTED_MODULE_3___default()("#" + firstError).offset();
+        jquery__WEBPACK_IMPORTED_MODULE_3___default()(document).scrollTop(offset.top - 80);
+
+        for (var i in errorData) {
+          jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + i).css("border-color", "red");
+          jquery__WEBPACK_IMPORTED_MODULE_3___default()('.' + i + 'Feedback').html(errorData[i]);
+        }
+      } else {
+        var _offset = jquery__WEBPACK_IMPORTED_MODULE_3___default()(".errorAll").offset();
+
+        jquery__WEBPACK_IMPORTED_MODULE_3___default()(document).scrollTop(_offset.top - 80);
+        jquery__WEBPACK_IMPORTED_MODULE_3___default()('#formRegisterChannel').trigger('reset');
+
+        var _loop = function _loop(_i2) {
+          setElement(function (perv) {
+            return _objectSpread(_objectSpread({}, perv), {}, _defineProperty({}, _i2, null));
+          });
+          jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + _i2).css("border-color", "#e3e9ef");
+        };
+
+        for (var _i2 in element) {
+          _loop(_i2);
+        }
+
+        jquery__WEBPACK_IMPORTED_MODULE_3___default()('.errorAll').html("<div class='alert alert-danger errorAll' >\u062E\u0637\u0627\u06CC\u06CC \u0631\u062E \u062F\u0627\u062F\u0647 \u0627\u0633\u062A \u060C \u0644\u0637\u0641\u0627 \u062F\u0648\u0628\u0627\u0631\u0647 \u062A\u0644\u0627\u0634 \u06A9\u0646\u06CC\u062F .</div> ");
+      }
+    });
+  };
 
   var backStyle = function backStyle(e) {
     var idParent = e.target.parentNode.id;
@@ -4542,16 +4595,11 @@ function Register() {
     className: "formContainer",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "formRight",
-      children: [(0,_hooks_useTitleForm__WEBPACK_IMPORTED_MODULE_1__.default)('ثبت نام'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-        className: "fa fa-star star",
-        "aria-hidden": "true"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-        className: "fas fa-sync-alt"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        children: [name, " "]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
+      children: [(0,_hooks_useTitleForm__WEBPACK_IMPORTED_MODULE_1__.default)('ثبت نام'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
         className: "form",
-        action: "",
+        id: "formRegister",
+        method: "post",
+        onSubmit: handleSubmit,
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "groupInput",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -4561,9 +4609,9 @@ function Register() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "divLabel",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "far fa-check-circle true"
+                className: "far fa-check-circle true"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "fas fa-exclamation false"
+                className: "fas fa-exclamation false"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
                 htmlFor: "name",
                 children: ["\u0646\u0627\u0645 \u0648 \u0646\u0627\u0645 \u062E\u0627\u0646\u0648\u0627\u062F\u06AF\u06CC ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
@@ -4590,9 +4638,9 @@ function Register() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "divLabel",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "far fa-check-circle true"
+                className: "far fa-check-circle true"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "fas fa-exclamation false"
+                className: "fas fa-exclamation false"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
                 htmlFor: "name",
                 children: "\u0627\u06CC\u0645\u06CC\u0644"
@@ -4617,9 +4665,9 @@ function Register() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "divLabel",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "far fa-check-circle true"
+                className: "far fa-check-circle true"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "fas fa-exclamation false"
+                className: "fas fa-exclamation false"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
                 htmlFor: "name",
                 children: "\u0645\u0648\u0628\u0627\u06CC\u0644 "
@@ -4644,9 +4692,9 @@ function Register() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "divLabel",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "far fa-check-circle true"
+                className: "far fa-check-circle true"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-                "class": "fas fa-exclamation false"
+                className: "fas fa-exclamation false"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
                 htmlFor: "name",
                 children: "\u0631\u0645\u0632 \u0639\u0628\u0648\u0631 "
@@ -4657,15 +4705,15 @@ function Register() {
               onInput: ChangeStyle,
               onBlur: handleCheckValue,
               id: "pass",
-              placeholder: "\u0631\u0645\u0632 \u0639\u0628\u0648\u0631ddids"
+              placeholder: "\u0631\u0645\u0632 \u0639\u0628\u0648\u0631"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "errorInput"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_hooks_captcha__WEBPACK_IMPORTED_MODULE_2__.default, {
-          handleCheckValue: handleCheckValue
+          ref: changeCaptcha
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-          type: "button",
+          type: "submit",
           className: "btnForm",
           id: "",
           value: "\u062B\u0628\u062A"

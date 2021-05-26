@@ -1,76 +1,92 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useState, useRef } from 'react';
 import useTitleForm from '../hooks/useTitleForm';
 import Captcha from '../hooks/captcha';
 import $ from "jquery";
 
-
-
 export default function Register() {
+   
+    const changeCaptcha = useRef()
+    
+    
     const [element, setElement] = useState({
         name: null,
         email: null,
         mobile: null,
         pass: null,
-        captcha:null,
     });
     
     const handleCheckValue = e => {
         let { id, value } = e.target;
         const idParent = e.target.parentNode.id;
         const child = e.target.parentNode.parentNode.lastChild;
-
         // console.log(idParent);
-
         const checkMobile = /^[0-9]{10}$/;
         if (id == 'mobile' && checkMobile.test(value)) {
             value = 0 + value;
         }
         setElement(prev => ({ ...prev, [id]: value }))
-
-        console.log(id);
-
         // // because in this fun to send only element , also geting errors for of this dont use fun then
         axios.post('/api/web/authUser/register', { [id]: value }, { headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'accept': 'application/json' } })
             .then(function (response) {
-
                 $('#' + idParent).css("border", "1px solid green");
-                // $(`#${idParent} label i.false`).css("display", "flex");
-
                 $(`#${idParent} i.true`).css("display", "flex");
                 child.innerHTML = '';
             })
             .catch((error) => {
                 $('#' + idParent).css("border", "1px solid red");
                 $(`#${idParent}`).addClass('inputFromSelect');
-
                 $(`#${idParent} i.false`).css("display", "flex");
                 child.innerHTML = error.response.data.errors[id]
-                // if (error.response.status == 500) {
-                //     $('#' + idParent).css("border","1px solid green");
-                // }
-                // else{
-                // const checkError = error.response.data.errors[id]
-                // if (checkError) {
-                //     setElement(prevState => ({ ...prevState, [id]: null }))
-                //     $('#' + idParent).css("border", "1px solid red");
-                //     $(`#${idParent} label i.false`).css("display", "flex");
-                //     $('.' + idParent + 'Feedback').html(checkError)
-                // }
-                // else {
-                //     $('#' + idParent).css("border","1px solid green");
-                //     $(`#${idParent} label i.true`).css("display", "flex");
-
-
-                // }
-                // }
             })
-
     }
-    // const checkInput=(e)=>{
-    //     const id=e.target.id;
-    //     const val=document.getElementById(id).value;
-    //     setName(val)
-    // }
+ 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let data = { ...element, captcha: $('#captcha').val() , key:$('#captchaKey').val() }
+        console.log(data);
+        
+        axios.post('/api/web/authUser/register', data, { headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),'Content-Type': 'application/json; charset=utf-8' } })
+            .then(response => {
+                console.log(response.data);
+                // props.history.replace('/endRegisterSocialNetwork', response.data.socialNetwork)
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'ثبت نام با موفقیت انجام شد .',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            })
+            .catch(error => {
+                console.log(error.response.data.errors);
+                
+                $('#captcha').val('')
+                $('.captchaFeedback').html('')
+                changeCaptcha.current.refreshCaptcha()
+                if (error.response.status == 422) {
+                    const errorData = error.response.data.errors;
+                    const firstError = Object.keys(errorData)[0];
+                    const offset = $("#" + firstError).offset();
+                    $(document).scrollTop(offset.top - 80)
+                    for (let i in errorData) {
+                        $('#' + i).css("border-color", "red")
+                        $('.' + i + 'Feedback').html(errorData[i])
+                    }
+                }
+                else {
+                    const offset = $(".errorAll").offset();
+                    $(document).scrollTop(offset.top - 80)
+                    $('#formRegisterChannel').trigger('reset');
+                    for (let i in element) {
+                        setElement(perv => ({ ...perv, [i]: null }))
+                        $('#' + i).css("border-color", "#e3e9ef")
+                    }
+                    $('.errorAll').html(
+                        `<div class='alert alert-danger errorAll' >خطایی رخ داده است ، لطفا دوباره تلاش کنید .</div> `
+                    )
+                }
+            })
+    }
     const backStyle = (e) => {
 
 
@@ -107,14 +123,11 @@ export default function Register() {
         <div className='formContainer'>
             <div className="formRight">
                 {useTitleForm('ثبت نام')}
-                <i className="fa fa-star star" aria-hidden="true"></i>
-                <i className="fas fa-sync-alt"></i>
-                <div>{name} </div>
-                <form className='form' action="">
+                <form className='form' id='formRegister' method='post' onSubmit={handleSubmit}>
                     <div className="groupInput">
                         <div className="inputForm " id='divName' data-lang='fa' >
                             <div className='divLabel'>
-                                <i class='far fa-check-circle true'></i><i class='fas fa-exclamation false'></i>
+                                <i className='far fa-check-circle true'></i><i className='fas fa-exclamation false'></i>
 
                                 <label htmlFor="name">نام و نام خانوادگی <i>(به فارسی)</i></label>
 
@@ -127,7 +140,7 @@ export default function Register() {
                         <div className="inputForm " id='divEmail' data-lang='en'>
 
                             <div className='divLabel'>
-                                <i class='far fa-check-circle true'></i><i class='fas fa-exclamation false'></i>
+                                <i className='far fa-check-circle true'></i><i className='fas fa-exclamation false'></i>
                                 <label htmlFor="name">ایمیل</label>
                             </div>
                             <input type="text" onFocus={backStyle} onInput={ChangeStyle} onBlur={handleCheckValue} id='email' placeholder='ایمیل' />
@@ -137,7 +150,7 @@ export default function Register() {
                     <div className="groupInput">
                         <div className="inputForm " id='divMobile' data-lang='num'>
                             <div className='divLabel'>
-                                <i class='far fa-check-circle true'></i><i class='fas fa-exclamation false'></i>
+                                <i className='far fa-check-circle true'></i><i className='fas fa-exclamation false'></i>
                                 <label htmlFor="name">موبایل </label>
                             </div>
                             <input type="text" onFocus={backStyle} onInput={ChangeStyle} onBlur={handleCheckValue} id='mobile' placeholder='موبایل' />
@@ -147,15 +160,15 @@ export default function Register() {
                     <div className="groupInput">
                         <div className="inputForm " id='divPass' data-lang='en_num'>
                             <div className='divLabel'>
-                                <i class='far fa-check-circle true'></i><i class='fas fa-exclamation false'></i>
+                                <i className='far fa-check-circle true'></i><i className='fas fa-exclamation false'></i>
                                 <label htmlFor="name">رمز عبور </label>
                             </div>
-                            <input type="text" onFocus={backStyle} onInput={ChangeStyle} onBlur={handleCheckValue} id='pass' placeholder='رمز عبورddids' />
+                            <input type="text" onFocus={backStyle} onInput={ChangeStyle} onBlur={handleCheckValue} id='pass' placeholder='رمز عبور' />
                         </div>
                         <div className="errorInput"></div>
                     </div>
-                    < Captcha handleCheckValue={handleCheckValue}></Captcha>
-                    <input type="button" className='btnForm' id="" value='ثبت' />
+                    < Captcha  ref={changeCaptcha} />
+                    <input type="submit" className='btnForm' id=""  value='ثبت' />
 
 
                 </form>
