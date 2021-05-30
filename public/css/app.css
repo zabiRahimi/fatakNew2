@@ -16493,7 +16493,7 @@ readers do not read off random characters that represent icons */
 
 .groupInput {
   width: 100%;
-  margin: 5px 0;
+  margin: 15px 0 5px;
 }
 
 .inputForm {
@@ -16597,6 +16597,29 @@ readers do not read off random characters that represent icons */
   padding: 0 9px;
   color: red;
   font-size: 12px;
+}
+
+.captchaPic {
+  width: 100%;
+  height: 30px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+.captchaPic img {
+  width: 150px;
+  display: flex;
+}
+
+.captchaPic button {
+  width: 30px;
+  margin-right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: blue;
+  color: white;
 }
 
 .btnForm {

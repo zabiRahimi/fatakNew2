@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
 use App\Rules\Name;
 use App\Rules\Mobile;
 use App\Rules\Pass;
@@ -22,6 +24,15 @@ use Mews\Captcha;
 
 class RegisterController extends Controller
 {
+    // public function esi(Request $request)
+    // {
+    //     $z='nabi';
+    //     return (($request->wantsJson())?
+    //     response()->json([])
+    //     :
+    //     response()->view()
+    //     ;
+    // }
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -66,15 +77,19 @@ class RegisterController extends Controller
     {
         
         $this->validator($request->all())->validate();
-
+        // این شرط برای این است که اطمسنان حاصل کنیم که کاربر دکمه ثبت فرم را انتخاب کردن و همه فیلدها احراز شده باشن و نه فقط یک فیلد احراز شده باشد، البته می توان بغیر از این دو فیلد دو یا چند فیلد دیگر را داخل شرط گذاشت
+        if($request->name && $request->captcha){ 
+            $this->create($request->all());
         // event(new Registered($user = $this->create($request->all())));
+    }
 
-        // // $this->guard('shop')->login($user);
+        // // // $this->guard('shop')->login($user);
 
+        // // // return $this->registered($request, $user)
+        // // //                 ?: redirect($this->redirectPath());
         // // return $this->registered($request, $user)
-        // //                 ?: redirect($this->redirectPath());
-        // return $this->registered($request, $user)
-        //                 ?: response()->json(['user'=> $user]);
+        // //                 ?: response()->json(['user'=> $user]);
+        // }
     }
 
    
@@ -99,12 +114,13 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         (!empty($data['id']))? $id=',' . $data['id'] : $id=',';
+        (!empty($data['key']))? $key= $data['key'] : $key=null;
         return Validator::make($data, [
           'name'=>['sometimes' , 'required' , 'min:3' , new Name ],
+          'email'=>['sometimes' , 'required' , 'email' , 'unique:users,email' . $id],
           'mobile'=>['sometimes' , 'required' ,new Mobile, 'unique:users,mobile'. $id],
           'pass'=>['sometimes' , 'required' , new Pass ],
-          'email'=>['sometimes' , 'required' , 'email' , 'unique:users,email' . $id],
-          'captcha'=>['sometimes' , 'required','captcha_api:'. $data['key']],
+          'captcha'=>['sometimes' , 'required','captcha_api:'. $key],
         ]);
     }
 
@@ -117,16 +133,15 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            // 'shop' => $data['shop'],
             'name' => $data['name'],
-            'lastName' => $data['lastName'],
+            'email' => $data['email'],
             'mobile' => $data['mobile'],
-            // 'email' => $data['email'],
-            'pass' => Hash::make($data['pass']),
-            'date_ad' => time(),
-            'date_up' => time(),
-            'stage'=>'1',
-            'show' => '1',
+            'password' => Hash::make($data['pass']),
+            // 'api_token' => Str::random(100),
+            // 'date_ad' => time(),
+            // 'date_up' => time(),
+            // 'stage'=>'1',
+            // 'show' => '1',
         ]);
     }
 
